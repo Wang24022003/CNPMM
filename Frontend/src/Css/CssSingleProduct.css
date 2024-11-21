@@ -1,0 +1,103 @@
+/* Main product image container */
+.main-product-image {
+     position: relative;
+     width: 100%;
+     overflow: hidden;
+     border-radius: 8px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   }
+   
+   .image-container {
+     position: relative;
+     width: 100%;
+     height: auto;
+   }
+   
+   /* Style for navigation buttons */
+   .prev-button,
+   .next-button {
+     position: absolute;
+     top: 50%;
+     transform: translateY(-50%);
+     background: none;
+     color: rgb(0, 0, 0);
+     border: none;
+     font-size: 24px;
+     padding: 8px;
+     cursor: pointer;
+     z-index: 10;
+     transition: color 0.3s ease;
+   }
+   
+   .prev-button:hover,
+   .next-button:hover {
+     background: rgba(0, 0, 0, 0.7);
+   }
+   
+   .prev-button {
+     left: 10px;
+   }
+   
+   .next-button {
+     right: 10px;
+   }
+   
+   /* Thumbnail images */
+   .other-product-images {
+     margin-top: 15px;
+     display: flex;
+     gap: 10px;
+     justify-content: center;
+   }
+   
+   .image-thumbnail {
+     flex: 0 0 20%;
+     margin: 0 5px;
+     border-radius: 8px;
+     overflow: hidden;
+     cursor: pointer;
+     position: relative;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   
+   .thumbnail-img {
+     width: 100%;
+     height: auto;
+     border-radius: 8px;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   
+   .image-thumbnail:hover .thumbnail-img {
+     transform: scale(1.1); /* Enlarges the thumbnail */
+     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+   }
+   
+   /* Add smooth slide-in effect */
+   .other-product-images {
+     animation: slideIn 0.5s ease-in-out;
+   }
+   
+   /* Keyframes for slide-in effect */
+   @keyframes slideIn {
+     from {
+       transform: translateX(-100%);
+       opacity: 0;
+     }
+     to {
+       transform: translateX(0);
+       opacity: 1;
+     }
+   }
+   
+   /* Responsive design for smaller screens */
+   @media (max-width: 768px) {
+     .other-product-images {
+       flex-direction: column;
+     }
+   
+     .image-thumbnail {
+       flex: 0 0 30%;
+       margin: 5px;
+     }
+   }
+   

@@ -1,0 +1,104 @@
+.auth-cards {
+     display: flex; /* Bố cục ngang */
+     flex-direction: row; /* Đảm bảo ảnh nằm bên trái */
+     justify-content: space-between;
+     align-items: center;
+     gap: 20px; 
+     /* padding: 20px; */
+     width: 100%;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+     border-radius: 20px;
+     max-width: 800px; 
+     margin: 0 auto; 
+     overflow: hidden;
+   }
+   
+   .auth-cardss {
+    display: flex; /* Bố cục ngang */
+    flex-direction: row; /* Đảm bảo ảnh nằm bên trái */
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; 
+    /* padding: 20px; */
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    max-width: 943px; 
+    margin: 0 auto; 
+    overflow: hidden;
+  }
+
+   .login-image {
+     flex: 1; /* Chiếm một phần không gian */
+     max-width: 50%; /* Tối đa 50% chiều rộng */
+     text-align: center; 
+   }
+   
+   .login-image img {
+     width: 100%; 
+     height: 100%;
+     object-fit: cover;
+     border-top-left-radius: 20px;
+     border-bottom-left-radius: 20px;
+   }
+   
+   .login-form {
+     flex: 1; /* Chiếm một phần không gian */
+     padding: 20px; /* Khoảng cách trong form */
+     max-width: 50%; /* Tối đa 50% chiều rộng */
+   }
+   
+   .login-form h3 {
+     font-size: 24px;
+     margin-bottom: 20px;
+   }
+   
+   .form-labels {
+     font-size: 14px;
+     font-weight: bold;
+     margin-bottom: -11px;
+   }
+   
+   .required {
+     color: red;
+     font-size: 14px;
+   }
+
+   .buttons {
+     background-color: var(--color-232f3e);
+     color: white;
+     font-size: 14px;
+     padding: 13px 40px;
+     border-radius: 10px;
+ }
+
+ .buttonq {
+  background-color: var(--color-232f3e);
+  color: white;
+  font-size: 14px;
+  padding: 13px 30px;
+  border-radius: 10px;
+}
+   
+ .signup-link {
+     color: red; /* Màu đỏ cho chữ Đăng ký */
+     font-weight: bold; /* In đậm chữ */
+     text-decoration: none; /* Loại bỏ gạch chân */
+   }
+   
+   .signup-link:hover {
+     text-decoration: underline; /* Gạch chân khi hover */
+   }
+   
+
+
+
+   .stylish-text {
+     font-family: 'Great Vibes', serif;
+     font-weight: 700; /* In đậm */
+     font-style: italic; /* In nghiêng nếu muốn */
+     color: #000; 
+     font-size: 30px;
+    
+   }
+   

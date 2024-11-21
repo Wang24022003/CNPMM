@@ -1,0 +1,43 @@
+.apply-discount-btn {
+     padding: 8px 12px;
+     border-radius: 5px; /* Để nút vuông, bạn có thể tùy chỉnh border-radius */
+     font-size: 14px; /* Kích thước chữ */
+     text-transform: uppercase; /* Chữ in hoa */
+     height: 40px; /* Đảm bảo nút có chiều cao cố định */
+   }
+   
+   .apply-discount-btn {
+     /* Các thuộc tính này có thể tùy chỉnh thêm */
+     background-color: #000000;
+     color: white;
+     border: none;
+   }
+   
+   .apply-discount-btn:hover {
+     background-color: #333333; /* Màu nền khi hover sẽ nhạt hơn */
+     color: white; /* Màu chữ vẫn là trắng */
+   }
+   
+   .choose-discount-code-link {
+     display: inline-block;
+     font-size: 14px;
+     text-transform: uppercase;
+     color: #000; /* Màu chữ mặc định */
+     text-decoration: none; /* Xóa gạch chân */
+     padding: 5px 10px;
+   }
+   
+   /* Căn phải */
+   .mt-2 {
+     display: flex;
+     justify-content: flex-end; /* Căn lề phải */
+   }
+   
+   /* Hiệu ứng hover */
+   .choose-discount-code-link:hover {
+     color: red; /* Màu chữ khi hover */
+   }
+   
+
+
+   

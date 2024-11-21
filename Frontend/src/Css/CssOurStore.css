@@ -1,0 +1,24 @@
+/* Nút màu xám với chữ đỏ nháy */
+.blink-effect {
+     background-color: #ffff !important; /* Màu nền xám */
+     color: red; /* Màu chữ đỏ */
+     animation: blink-text 1s step-start 0s infinite; /* Hiệu ứng nháy cho chữ */
+     border: none; /* Bỏ viền nút */
+     padding: 10px 20px; /* Điều chỉnh padding cho nút */
+     border-radius: 5px; /* Bo góc nút */
+     font-weight: bold; /* Làm cho chữ đậm */
+   }
+   
+   /* Định nghĩa hiệu ứng nháy cho chữ */
+   @keyframes blink-text {
+     0% {
+       color: red;
+     }
+     50% {
+       color: transparent; /* Chữ biến mất giữa chừng */
+     }
+     100% {
+       color: red;
+     }
+   }
+   
