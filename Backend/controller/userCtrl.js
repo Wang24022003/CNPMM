@@ -30,7 +30,9 @@ const createUser = asyncHandler(async (req, res) => {
     /**
      * TODO:if user not found user create a new user
      */
-    const newUser = await User.create(req.body);
+    const { firstname, lastname, email, mobile, password } = req.body;
+    const user = { firstname, lastname, email, mobile, password };
+    const newUser = await User.create(user);
     res.json(newUser);
   } else {
     /**
@@ -40,34 +42,76 @@ const createUser = asyncHandler(async (req, res) => {
   }
 });
 
+// Active Account user
+const activeUser = asyncHandler(async (req, res) => {
+  const email = req.body.email;
+  const findUser = await User.findOne({ email: email });
+  if (findUser) {
+    const otp = Math.floor(Math.random() * 1000000)
+      .toString()
+      .padStart(6, "0");
+    const resetURL = `Chào bạn, vui lòng nhập OTP sau ${otp} để kích hoạt tài khoản của bạn.Mã OTP này có hiệu lực trong vòng 10 phút kể từ bây giờ.`;
+    findUser.codeId = otp;
+    findUser.save();
+    const data = {
+      to: email,
+      text: "Hey User",
+      subject: "Active Account",
+      htm: resetURL,
+    };
+    sendEmail(data);
+    res.json("oki");
+  } else {
+    throw new Error("Invalid Credentials");
+  }
+});
+//Check active code
+const checkActiveCode = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+  const findUser = await User.findOne({ email: email });
+  if (findUser) {
+    const { codeId } = findUser;
+    if (otp === codeId) {
+      findUser.isBlocked = false;
+      findUser.save();
+      res.json("oki");
+    } else {
+      throw new Error("Invalid OTP code");
+    }
+  }
+});
 // Login a user
 const loginUserCtrl = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   // check if user exists or not
   const findUser = await User.findOne({ email });
-  if (findUser && (await findUser.isPasswordMatched(password))) {
-    const refreshToken = await generateRefreshToken(findUser?._id);
-    const updateuser = await User.findByIdAndUpdate(
-      findUser.id,
-      {
-        refreshToken: refreshToken,
-      },
-      { new: true }
-    );
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 72 * 60 * 60 * 1000,
-    });
-    res.json({
-      _id: findUser?._id,
-      firstname: findUser?.firstname,
-      lastname: findUser?.lastname,
-      email: findUser?.email,
-      mobile: findUser?.mobile,
-      token: generateToken(findUser?._id),
-    });
+  if (!findUser.isBlocked) {
+    if (findUser && (await findUser.isPasswordMatched(password))) {
+      const refreshToken = await generateRefreshToken(findUser?._id);
+      const updateuser = await User.findByIdAndUpdate(
+        findUser.id,
+        {
+          refreshToken: refreshToken,
+        },
+        { new: true }
+      );
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 72 * 60 * 60 * 1000,
+      });
+      res.json({
+        _id: findUser?._id,
+        firstname: findUser?.firstname,
+        lastname: findUser?.lastname,
+        email: findUser?.email,
+        mobile: findUser?.mobile,
+        token: generateToken(findUser?._id),
+      });
+    } else {
+      throw new Error("Invalid Credentials");
+    }
   } else {
-    throw new Error("Invalid Credentials");
+    throw new Error("User Account isn't Active");
   }
 });
 
@@ -119,20 +163,24 @@ const loginAdmin = asyncHandler(async (req, res) => {
   }
 
   // Kiểm tra vai trò admin
-  if (findAdmin.role !== 'admin') {
+  if (findAdmin.role !== "admin") {
     return res.status(401).json({ message: "You are not Admin" });
   }
 
   // Tạo refresh token và cập nhật người dùng
   const refreshToken = await generateRefreshToken(findAdmin?.id);
-  const updateAdmin = await User.findByIdAndUpdate(findAdmin.id, {
-    refreshToken: refreshToken,
-  }, {
-    new: true
-  });
+  const updateAdmin = await User.findByIdAndUpdate(
+    findAdmin.id,
+    {
+      refreshToken: refreshToken,
+    },
+    {
+      new: true,
+    }
+  );
 
   // Thiết lập cookie refresh token
-  res.cookie('refreshToken', refreshToken, {
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     maxAge: 72 * 60 * 60 * 1000,
   });
@@ -160,20 +208,21 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
   const user = await User.findOne({ refreshToken });
 
   if (!user) {
-    return res.status(403).json({ message: "Refresh Token not found, please login again" });
+    return res
+      .status(403)
+      .json({ message: "Refresh Token not found, please login again" });
   }
 
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
     if (err || user.id !== decoded.id) {
-      return res.status(403).json({ message: "Refresh Token is invalid, please login again" });
+      return res
+        .status(403)
+        .json({ message: "Refresh Token is invalid, please login again" });
     }
     const accessToken = generateToken(user._id);
     res.json({ accessToken });
   });
 });
-
-
-
 
 // logout functionality
 
@@ -203,15 +252,15 @@ const logout = asyncHandler(async (req, res) => {
 
 const updatedUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log("data" + id)
+  console.log("data" + id);
   validateMongoDbId(id);
 
   try {
     const { email } = req.body;
 
     // Kiểm tra xem có cập nhật email và email mới không trùng với bất kỳ người dùng nào khác
-    if (email && await User.exists({ email: email, _id: { $ne: id } })) {
-      return res.status(400).json({ message: 'Email is already in use' });
+    if (email && (await User.exists({ email: email, _id: { $ne: id } }))) {
+      return res.status(400).json({ message: "Email is already in use" });
     }
 
     const updatedFields = {
@@ -219,20 +268,18 @@ const updatedUser = asyncHandler(async (req, res) => {
       lastname: req.body.lastname,
       email: req.body.email,
       mobile: req.body.mobile,
-      role: req.body.role
+      role: req.body.role,
     };
 
     // Nếu email không được cập nhật, hoặc được cập nhật nhưng không trùng với bản ghi khác, ta tiến hành cập nhật
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      updatedFields,
-      { new: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(id, updatedFields, {
+      new: true,
+    });
 
     res.json(updatedUser);
   } catch (error) {
-    console.error('Failed to update user:', error);
-    res.status(500).json({ message: 'Failed to update user' });
+    console.error("Failed to update user:", error);
+    res.status(500).json({ message: "Failed to update user" });
   }
 });
 // save user Address
@@ -316,7 +363,9 @@ const blockUser = asyncHandler(async (req, res) => {
     res.json(blockusr);
   } catch (error) {
     console.error("Error blocking user:", error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
@@ -336,11 +385,11 @@ const unblockUser = asyncHandler(async (req, res) => {
     res.json({ unblock, message: "User UnBlocked" });
   } catch (error) {
     console.error("Error unblocking user:", error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
-
-
 
 const updatePassword = asyncHandler(async (req, res) => {
   const { _id } = req.user;
@@ -513,7 +562,6 @@ const createOrder = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
 
 const getMyOrders = asyncHandler(async (req, res) => {
   const { _id } = req.user;
@@ -690,4 +738,7 @@ module.exports = {
 
   removeProductFromCart,
   updateProductQuantityFromCart,
+
+  activeUser,
+  checkActiveCode,
 };

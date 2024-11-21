@@ -32,8 +32,13 @@ var userSchema = new mongoose.Schema(
     },
     isBlocked: {
       type: Boolean,
-      default: false,
+      default: true,
     },
+    codeId: {
+      type: String,
+      default: "",
+    },
+
     cart: {
       type: Array,
       default: [],
