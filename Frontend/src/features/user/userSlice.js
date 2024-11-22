@@ -13,6 +13,29 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const active_account = createAsyncThunk(
+  "auth/active_account",
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.active_account(userData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const check_active_account = createAsyncThunk(
+  "auth/check_active_account",
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.check_active_account(userData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (userData, thunkAPI) => {
@@ -157,6 +180,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  isBlocked:'...'
 };
 
 export const authSlice = createSlice({
@@ -175,6 +199,7 @@ export const authSlice = createSlice({
         state.createdUser = action.payload;
         if (state.isSuccess === true) {
           toast.info("User Created Successfully");
+
         }
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -186,6 +211,50 @@ export const authSlice = createSlice({
           toast.error(action.payload.response.data.message);
         }
       })
+
+      .addCase(active_account.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(active_account.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        
+      })
+      .addCase(active_account.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isError === true) {
+          toast.error(action.payload.response.data.message);
+        }
+      })
+
+
+      .addCase(check_active_account.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(check_active_account.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        
+        state.isBlocked = false;
+        toast.success("Kích hoạt tài khoản thành công");
+        
+      })
+      .addCase(check_active_account.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        if (state.isError === true) {
+          toast.error(action.payload.response.data.message);
+        }
+      })
+
+
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -206,6 +275,11 @@ export const authSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         if (state.isError === true) {
+          if(action.payload.response.data.message === "User Account isn't Active")
+            {
+              state.isBlocked = true
+  
+            }
           toast.error(action.payload.response.data.message);
         }
       })

@@ -7,7 +7,7 @@ import CustomInput from "../components/CustomInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../features/user/userSlice";
+import { active_account, registerUser } from "../features/user/userSlice";
 import logo from "../assets/Remove-bg.ai_1720413887960.png"; // Adjust the path according to your project structure
 import './../Css/CssLogin.css';
 
@@ -30,6 +30,9 @@ let signUpSchema = yup.object({
 });
 
 const Signup = () => {
+  const isLoading = useSelector((state) => state.auth.isLoading);
+
+
   const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,8 +46,10 @@ const Signup = () => {
     },
     validationSchema: signUpSchema,
     onSubmit: (values) => {
-      dispatch(registerUser(values));
-      navigate("/login");
+        dispatch(registerUser(values));
+        // navigate(`/otp/${values.email}`);
+        navigate(`/login`);
+      
       // Optionally navigate on successful registration
     },
   });

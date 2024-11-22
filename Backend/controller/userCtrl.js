@@ -46,6 +46,10 @@ const createUser = asyncHandler(async (req, res) => {
 const activeUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
   const findUser = await User.findOne({ email: email });
+  console.log("🚀 ~ file: userCtrl.js:72 ~ activeUser ~ email:", email);
+
+  console.log("🚀 ~ file: userCtrl.js:50 ~ activeUser ~ findUser:", findUser);
+
   if (findUser) {
     const otp = Math.floor(Math.random() * 1000000)
       .toString()
@@ -65,6 +69,8 @@ const activeUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Credentials");
   }
 });
+
+
 //Check active code
 const checkActiveCode = asyncHandler(async (req, res) => {
   const { email, otp } = req.body;
@@ -85,8 +91,8 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   // check if user exists or not
   const findUser = await User.findOne({ email });
-  if (!findUser.isBlocked) {
-    if (findUser && (await findUser.isPasswordMatched(password))) {
+  if (findUser && (await findUser.isPasswordMatched(password))) {
+    if (!findUser.isBlocked) {
       const refreshToken = await generateRefreshToken(findUser?._id);
       const updateuser = await User.findByIdAndUpdate(
         findUser.id,
@@ -108,11 +114,13 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
         token: generateToken(findUser?._id),
       });
     } else {
-      throw new Error("Invalid Credentials");
+      throw new Error("User Account isn't Active");
     }
+    
   } else {
-    throw new Error("User Account isn't Active");
+    throw new Error("Invalid Credentials");
   }
+ 
 });
 
 // admin login

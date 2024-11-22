@@ -174,6 +174,21 @@ const SingleProduct = () => {
     }
   }, [productState, productsState, getProductId]);
 
+// -------------------------------------------------------------
+  const [error, setError] = useState("");
+
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+
+    if (value < 1) {
+      setError("Số lượng không được nhỏ hơn 1.");
+    } else {
+      setError(""); // Xóa lỗi nếu nhập đúng
+      setQuantity(value);
+    }
+  };
+
+
   return (
     <>
       <Meta title={"Product Name"} />
@@ -292,17 +307,17 @@ const SingleProduct = () => {
                   <h3 className="product-heading">Số lượng :</h3>
                   {alreadyAdded === false && (
                     <div className="">
-                      <input
-                        type="number"
-                        name=""
-                        min={1}
-                        max={10}
-                        className="form-control"
-                        style={{ width: "70px" }}
-                        id=""
-                        onChange={(e) => setQuantity(e.target.value)}
-                        value={quantity}
-                      />
+                    <input
+                      type="number"
+                      min={1}
+                      max={10}
+                      className="form-control"
+                      style={{ width: "70px" }}
+                      // onChange={(e) => setQuantity(e.target.value)}
+                      onChange={handleQuantityChange}
+                      value={quantity}
+                    />
+                     {error && <small className="text-danger">{error}</small>}
                     </div>
                   )}
                   <div
@@ -318,7 +333,7 @@ const SingleProduct = () => {
                         alreadyAdded ? navigate("/cart") : uploadCart();
                       }}
                     >
-                      {alreadyAdded ? "Thêm sản phẩm vào giỏ hàng" : "Thêm sản phẩm vào giỏ hàng "}
+                      {alreadyAdded ? "sản phẩm vào giỏ hàng" : "Thêm sản phẩm vào giỏ hàng "}
                     </button>
                   </div>
                 </div>

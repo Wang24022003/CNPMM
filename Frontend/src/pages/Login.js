@@ -22,6 +22,7 @@ let loginSchema = yup.object({
 
 const Login = () => {
   const authState = useSelector((state) => state.auth);
+  // const isBlocked = useSelector((state) => state.auth.isBlocked);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -32,12 +33,19 @@ const Login = () => {
     validationSchema: loginSchema,
     onSubmit: (values) => {
       dispatch(loginUser(values));
+      localStorage.setItem('password', formik.values.password);
     },
   });
 
   useEffect(() => {
     if (authState.user !== null && authState.isError === false) {
       window.location.href = "/";
+    }
+    if (authState.isError === true ) {
+
+      if(authState.isBlocked === true){
+        window.location.href = `/otp/${formik.values.email}`;
+      }
     }
   }, [authState]);
 

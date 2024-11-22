@@ -51,9 +51,20 @@ const rateProduct = async (data) => {
   }
 };
 
+const updateOrder = async (data) => {
+  const response = await axios.put(
+    `${base_url}user/updateOrder/${data.id}`,
+    { status: data.status },
+    config
+  );
+
+  return response.data;
+};
+
 export const productSevice = {
   getProducts,
   addToWishlist,
   getSingleProduct,
   rateProduct,
+  updateOrder,
 };

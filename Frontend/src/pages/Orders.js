@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../features/user/userSlice";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { updateOrder } from "../features/products/productSlilce";
+import { toast } from "react-toastify";
 
 
 const Orders = () => {
@@ -77,6 +79,23 @@ const Orders = () => {
       navigate(`/product/${productId}`);
     } else {
       console.error("Không tìm thấy ID sản phẩm");
+    }
+  };
+  
+  const handleCancelOrder = (orderId) => {
+    if (orderId) {
+      // Gọi API hủy đơn hàng
+      dispatch(updateOrder({id: orderId, status:"Cancelled" }))
+        .unwrap()
+        .then(() => {
+          toast.success("Đơn hàng đã được hủy thành công!");
+          
+          dispatch(getOrders(config2));
+        })
+        .catch((error) => {
+          console.error("Lỗi khi hủy đơn hàng:", error);
+          toast.error("Không thể hủy đơn hàng. Vui lòng thử lại sau.");
+        });
     }
   };
   
@@ -259,33 +278,16 @@ const Orders = () => {
                             </p>
                             <p>Số điện thoại: {item.shippingInfo.pincode}</p>
 
-                            {/* Chi tiết sản phẩm */}
-                            {/* <h5>Chi tiết sản phẩm</h5>
-                            {item.orderItems.map((product, index) => (
-                              <div
-                                className="d-flex align-items-center justify-content-between border-bottom py-2"
-                                key={index}
-                              >
-                                <div className="d-flex align-items-center">
-                                  <img
-                                    src={product.product.images[0]?.url}
-                                    alt="Product"
-                                    width="50"
-                                    height="50"
-                                    className="me-2"
-                                  />
-                                  <span>{product.product.title}</span>
-                                </div>
-                                <span>Số lượng: {product.quantity}</span>
-                                <span>{product.price.toLocaleString("vi-VN")} ₫</span>
-                                <span>
-                                  {(
-                                    product.price * product.quantity
-                                  ).toLocaleString("vi-VN")}{" "}
-                                  ₫
-                                </span>
+                            {(item.orderStatus === "Ordered" || item.orderStatus === "Processed") && (
+                              <div className="mt-3">
+                                <button
+                                  className="btn btn-sm btn-danger"
+                                   onClick={() => handleCancelOrder(item?._id)}
+                                >
+                                  Hủy Đơn Hàng
+                                </button>
                               </div>
-                            ))} */}
+                            )}
 
                             {/* Nếu trạng thái là "Delivered", hiển thị nút Review */}
                             {item.orderStatus === "Delivered" && (
@@ -339,6 +341,7 @@ const Orders = () => {
                                       width={50}
                                       height={50}
                                       alt="product"
+                                      onClick={() => handleReview(i?.product?._id)}
                                     />
                                   </div>
                                   <div style={styles.productColumn}>

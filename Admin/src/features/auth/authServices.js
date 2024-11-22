@@ -38,6 +38,7 @@ const updateOrder = async (data) => {
     { status: data.status },
     config
   );
+  
 
   return response.data;
 };
@@ -77,6 +78,7 @@ const authService = {
   getMonthlyOrders,
   getYearlyStats,
   updateOrder,
+  
 };
 
 export default authService;

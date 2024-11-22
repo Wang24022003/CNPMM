@@ -8,6 +8,20 @@ const register = async (userData) => {
   }
 };
 
+const active_account = async (userData) => {
+  const response = await axios.post(`${base_url}user/active-account`, userData);
+  if (response.data) {
+    return response.data;
+  }
+};
+
+const check_active_account = async (userData) => {
+  const response = await axios.post(`${base_url}user/check-active-account`, userData);
+  if (response.data) {
+    return response.data;
+  }
+};
+
 const login = async (userData) => {
   const response = await axios.post(`${base_url}user/login`, userData);
 
@@ -131,6 +145,8 @@ const emptyCart = async (data) => {
   }
 };
 
+
+
 const paymentVerification = async (params) => {
   const response = await axios.post(
     `${base_url}user/order/paymentVerification`,
@@ -148,6 +164,8 @@ const paymentVerification = async (params) => {
 
 export const authService = {
   register,
+  active_account,
+  check_active_account,
   login,
   getUserWislist,
   addToCart,

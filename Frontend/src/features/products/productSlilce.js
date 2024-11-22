@@ -46,6 +46,18 @@ export const addRating = createAsyncThunk(
   }
 );
 
+
+export const updateOrder = createAsyncThunk(
+  "order/update-order",
+  async (data, thunkAPI) => {
+    try {
+      return await productSevice.updateOrder(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const productState = {
   product: [],
   compareList: [],
@@ -145,6 +157,25 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error;
+      })
+
+      .addCase(updateOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateOrder.fulfilled, (state, action) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.updateorder = action.payload;
+        if (state.isSuccess === true) {
+          toast.success("Order Status Changed");
+        }
+      })
+      .addCase(updateOrder.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.isLoading = false;
       });
   },
 });

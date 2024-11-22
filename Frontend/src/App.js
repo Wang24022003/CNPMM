@@ -26,6 +26,7 @@ import { OpenRoutes } from "./routing/OpenRoutes";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import VNPayReturn from "./pages/VNPayReturn";
+import OTPVerification from "./pages/OTPVerification";
 
 function App() {
   return (
@@ -98,6 +99,7 @@ function App() {
                 </OpenRoutes>
               }
             />
+            <Route path='/otp/:id' element={<OTPVerification/>} />
             <Route path="reset-password/:token" element={<Resetpassword />} />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="refund-policy" element={<RefundPloicy />} />
