@@ -13,20 +13,21 @@ import './../Css/CssLogin.css';
 
 // Updated Yup schema
 let signUpSchema = yup.object({
-  firstname: yup.string().required("First Name is Required"),
-  lastname: yup.string().required("Last Name is Required"),
+  firstname: yup.string().required("Tên không được để trống"),
+  lastname: yup.string().required("Họ không được để trống"),
   email: yup
     .string()
-    .email("Email should be valid")
-    .required("Email is Required"),
+    .email("Email không hợp lệ")
+    .required("Email không được để trống"),
   mobile: yup
     .string()
-    .matches(/^(\d{10})$/, "Mobile Number must be exactly 10 digits")
-    .required("Mobile Number is Required"),
+    .matches(/^(\d{10})$/, "Số điện thoại phải có đúng 10 chữ số")
+    .required("Số điện thoại không được để trống"),
   password: yup
     .string()
-    .min(8, "Password must be at least 8 characters long")
-    .required("Password is Required"),
+    
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt")
+    .required("Mật khẩu không được để trống"),
 });
 
 const Signup = () => {

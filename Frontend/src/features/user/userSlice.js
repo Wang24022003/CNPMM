@@ -198,7 +198,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.createdUser = action.payload;
         if (state.isSuccess === true) {
-          toast.info("User Created Successfully");
+          toast.info("Đăng ký tài khoản thành công");
 
         }
       })
@@ -268,6 +268,7 @@ export const authSlice = createSlice({
 
           toast.info("User Logged In Successfully");
         }
+        //toast.info("User Logged In Successfully");
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -452,7 +453,7 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.token = action.payload;
         if (state.isSuccess) {
-          toast.success("Forgot Password Email Sent Successfully!");
+          toast.success("Kiểm tra gmail để đặt lại mật khẩu!");
         }
       })
       .addCase(forgotPasswordToken.rejected, (state, action) => {

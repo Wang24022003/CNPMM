@@ -63,13 +63,23 @@ const { id } = useParams();
      }
  };
 
-  const handleOtpSubmit = (e) => {
-     e.preventDefault();
-     const otpCode = otp.join('');
-     dispatch(check_active_account({ email:id, otp: otpCode }));
+ const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+    const otpCode = otp.join('');
 
-     
- };
+    try {
+        // Gửi yêu cầu kiểm tra OTP
+        await dispatch(check_active_account({ email: id, otp: otpCode })).unwrap();
+
+        // Nếu OTP đúng, điều hướng hoặc thực hiện hành động tiếp theo
+        //toast.success("Mã OTP hợp lệ!");
+    } catch (error) {
+        // Nếu OTP sai, thông báo lỗi và xóa hết các số trong ô nhập
+        //toast.error("Mã OTP không hợp lệ. Vui lòng thử lại!");
+        setOtp(new Array(6).fill('')); // Reset lại các ô nhập OTP
+    }
+};
+
 
   useEffect(() => {
      if (authState.user !== null && authState.isError === false) {

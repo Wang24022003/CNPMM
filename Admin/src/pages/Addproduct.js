@@ -20,18 +20,27 @@ import {
   updateAProduct,
 } from "../features/product/productSlice";
 let schema = yup.object().shape({
-  title: yup.string().required("Title is Required"),
-  description: yup.string().required("Description is Required"),
-  price: yup.number().required("Price is Required"),
-  brand: yup.string().required("Brand is Required"),
-  category: yup.string().required("Category is Required"),
-  tags: yup.string().required("Tag is Required"),
+  title: yup.string().required("Tiêu đề không được để trống"),
+  description: yup.string().required("Mô tả không được để trống"),
+  price: yup
+    .number()
+    .typeError("Giá phải là một số") // Kiểm tra giá trị phải là số
+    .moreThan(0, "Giá phải lớn hơn 0") // Kiểm tra giá trị phải lớn hơn 0
+    .required("Giá không được để trống"),
+  brand: yup.string().required("Thương hiệu không được để trống"),
+  category: yup.string().required("Danh mục không được để trống"),
+  tags: yup.string().required("Thẻ không được để trống"),
   color: yup
     .array()
-    .min(1, "Pick at least one color")
-    .required("Color is Required"),
-  quantity: yup.number().required("Quantity is Required"),
+    .min(1, "Chọn ít nhất một màu")
+    .required("Màu sắc không được để trống"),
+  quantity: yup
+    .number()
+    .typeError("Số lượng phải là một số") // Kiểm tra giá trị phải là số
+    .moreThan(0, "Số lượng phải lớn hơn 0") // Kiểm tra giá trị phải lớn hơn 0
+    .required("Số lượng không được để trống"),
 });
+
 
 const Addproduct = () => {
   const dispatch = useDispatch();
@@ -172,6 +181,7 @@ const Addproduct = () => {
       if (getProductId !== undefined) {
         const data = { id: getProductId, productData: values };
         dispatch(updateAProduct(data));
+        navigate('/admin/list-product');
       } else {
         dispatch(createProducts(values));
         formik.resetForm();

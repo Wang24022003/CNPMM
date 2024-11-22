@@ -137,7 +137,7 @@ const Header = () => {
         <div className="container-xxl">
           <div className="row">
             <div className="col-6">
-              <p className="text-white mb-0">Miễn phí vận chuyển cho đơn hàng trên 1.000.000đ</p>
+              <p className="text-white mb-0">Miễn phí vận chuyển cho đơn hàng trên 10.000.000đ</p>
             </div>
             <div className="col-6">
               <p className="text-end text-white mb-0">
