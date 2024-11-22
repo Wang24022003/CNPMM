@@ -1,4 +1,6 @@
 const Product = require("../models/productModel");
+const Order = require("../models/orderModel");
+
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
@@ -190,7 +192,37 @@ const rating = asyncHandler(async (req, res) => {
   }
 });
 
+const getPuschasedProduct = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const orders = await Order.find({
+      user: userId,
+      orderStatus: "Delivered",
+    }).select("orderItems.product -_id");
+    // Extract tất cả product id
+    const productIds = orders
+      .map((order) => order.orderItems.map((item) => item.product))
+      .flat(); // Gộp mảng các mảng nhỏ thành một mảng duy nhất
+    const products = await Product.find({ _id: { $in: productIds } }) // Tìm các sản phẩm theo productIds
+      .populate({
+        path: "color",
+        select: "", // Không chọn trường nào để không thực hiện populate
+        options: { strictPopulate: false },
+      })
+      .populate({
+        path: "ratings",
+        select: "", // Không chọn trường nào
+        options: { strictPopulate: false },
+      })
+      .select("-color -ratings"); // Loại bỏ hai trường `color` và `ratings`
+
+    res.json(products);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 module.exports = {
+  getPuschasedProduct,
   createProduct,
   getaProduct,
   getAllProduct,
