@@ -278,7 +278,7 @@ const Orders = () => {
                             </p>
                             <p>Số điện thoại: {item.shippingInfo.pincode}</p>
 
-                            {(item.orderStatus === "Ordered" || item.orderStatus === "Processed" || item.orderStatus === "Paid") && (
+                            {(item.orderStatus === "Ordered" || item.orderStatus === "Processed" ) && (
                               <div className="mt-3">
                                 <button
                                   className="btn btn-sm btn-danger"

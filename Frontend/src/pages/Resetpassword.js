@@ -11,7 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { resetPassword } from "../features/user/userSlice";
 
 let passwordSchema = yup.object({
-  password: yup.string().required("Password is Required"),
+  
+  password: yup
+    .string()
+    
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt")
+    .required("Mật khẩu không được để trống"),
 });
 
 const Resetpassword = () => {

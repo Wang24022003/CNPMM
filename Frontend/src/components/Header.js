@@ -406,6 +406,16 @@ const Header = () => {
                       >
                         Đơn mua
                       </Link>
+                      <Link to="/history" className="dropdown-item"
+                        style={{
+                          display: "block",
+                          padding: "8px 16px",
+                          textDecoration: "none",
+                          color: "#333",
+                        }}
+                      >
+                        Sản phẩm đã mua
+                      </Link>
                       {authState?.user !== null && (
                         <button
                           className="dropdown-item border-0 bg-transparent"

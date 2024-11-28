@@ -38,6 +38,13 @@ const getUserWislist = async () => {
   }
 };
 
+const getUserHistory = async (Data) => {
+  const response = await axios.post(`${base_url}product/purchased`, Data);
+  if (response.data) {
+    return response.data;
+  }
+};
+
 const addToCart = async (cartData) => {
   const response = await axios.post(`${base_url}user/cart`, cartData, config);
   if (response.data) {
@@ -168,6 +175,7 @@ export const authService = {
   check_active_account,
   login,
   getUserWislist,
+  getUserHistory,
   addToCart,
   getCart,
   removeProductFromCart,

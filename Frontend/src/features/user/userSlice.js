@@ -58,6 +58,17 @@ export const getuserProductWishlist = createAsyncThunk(
   }
 );
 
+export const getuserProductHistory = createAsyncThunk(
+  "user/history",
+  async (ID, thunkAPI) => {
+    try {
+      return await authService.getUserHistory(ID);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const addProdToCart = createAsyncThunk(
   "user/cart/add",
   async (cartData, thunkAPI) => {
@@ -180,7 +191,8 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
-  isBlocked:'...'
+  isBlocked:'...',
+  history:[]
 };
 
 export const authSlice = createSlice({
@@ -294,6 +306,21 @@ export const authSlice = createSlice({
         state.wishlist = action.payload;
       })
       .addCase(getuserProductWishlist.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(getuserProductHistory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getuserProductHistory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.history = action.payload;
+      })
+      .addCase(getuserProductHistory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

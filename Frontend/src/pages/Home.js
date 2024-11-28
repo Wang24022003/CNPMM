@@ -310,6 +310,8 @@ const Home = () => {
             })}
         </div>
       </Container>
+
+      
       <Container class1="famous-wrapper py-1 home-wrapper-2">
         <div className="row">
           <div className="col-3">

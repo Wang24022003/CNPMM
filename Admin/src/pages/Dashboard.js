@@ -185,22 +185,24 @@ const Dashboard = () => {
           <div>
             <p className="desc">Tổng doanh thu Sắc</p>
             <h4 className="mb-0 sub-title">
-              {yearlyDataState && yearlyDataState[0]?.amount ? (yearlyDataState[0].amount * 300).toLocaleString('vi-VN') : 0}₫
+              {yearlyDataState && yearlyDataState[0]?.amount ? (yearlyDataState[0].amount ).toLocaleString('vi-VN') : 0}₫
             </h4>
           </div>
           <div className="d-flex flex-column align-items-end">
-            <p className="mb-0  desc">Thu nhập trong năm vừa qua tính đến hôm nay</p>
+            <p className="mb-0  desc">Thu nhập trong năm vừa qua tính đến </p>
+            <p className="mb-0  desc"> 22/11/2024 </p>
           </div>
         </div>
         <div className="d-flex p-3 justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
           <div>
-            <p className="desc">Tổng doanh số</p>
+            <p className="desc">Số lượng sản phẩm đã bán</p>
             <h4 className="mb-0 sub-title">
               {yearlyDataState && yearlyDataState[0]?.count}
             </h4>
           </div>
           <div className="d-flex flex-column align-items-end">
-            <p className="mb-0  desc">Doanh số trong năm vừa qua tính đến hôm nay</p>
+            <p className="mb-0  desc">Số lượng sản phẩm đã bán trong năm vừa qua tính đến</p>
+            <p className="mb-0  desc"> 22/11/2024 </p>
           </div>
         </div>
       </div>

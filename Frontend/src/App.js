@@ -27,6 +27,7 @@ import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import VNPayReturn from "./pages/VNPayReturn";
 import OTPVerification from "./pages/OTPVerification";
+import History from "./pages/History";
 
 function App() {
   return (
@@ -79,6 +80,14 @@ function App() {
               element={
                 <PrivateRoutes>
                   <Wishlist />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="history"
+              element={
+                <PrivateRoutes>
+                  <History />
                 </PrivateRoutes>
               }
             />
